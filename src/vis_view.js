@@ -30,8 +30,16 @@ export default class VisView {
 
         const changeArrayLength = $("<input type='text' value='10'/>").change((e) => {
             const newArraySize = parseInt(e.target.value)
-            if (newArraySize) {
+            if (newArraySize && newArraySize < 100 && newArraySize > 0) {
                 this.config.arrayLength = newArraySize
+                this.resetSortingArray()
+            } else if (newArraySize > 100) {
+                this.config.arrayLength = 100
+                e.target.value = 100
+                this.resetSortingArray()
+            } else if (newArraySize < 1) {
+                this.config.arrayLength = 1
+                e.target.value = 1
                 this.resetSortingArray()
             }
         })

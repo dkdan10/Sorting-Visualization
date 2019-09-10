@@ -23,7 +23,15 @@ h1 {
 }
 
 .visLi {
+    position: relative;
+    width: 32px;
     background-color: aqua;
+    text-align: center;
+}
+.visLi span {
+    position: absolute;
+    bottom: 0;
+    right: 8px;
 }
 
 .selected {

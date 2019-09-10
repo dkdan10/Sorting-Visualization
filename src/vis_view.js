@@ -30,7 +30,7 @@ export default class VisView {
 
         const changeArrayLength = $("<input type='text' value='10'/>").change((e) => {
             const newArraySize = parseInt(e.target.value)
-            if (newArraySize && newArraySize < 100 && newArraySize > 0) {
+            if (newArraySize && newArraySize <= 100 && newArraySize > 0) {
                 this.config.arrayLength = newArraySize
                 this.resetSortingArray()
             } else if (newArraySize > 100) {
@@ -125,7 +125,7 @@ export default class VisView {
         const arrayUl = $("<ul>").addClass("visUl")
         for (let i = 0; i < arr.length; i++) {
             const el = arr[i];
-            const nextLi = $("<li>").append(`${el}`).addClass("visLi").height(Math.floor(el / this.config.arrayLength * 10) + "%")
+            const nextLi = $("<li>").append(`<span>${el}</span>`).addClass("visLi").height(Math.floor(el / this.config.arrayLength * 10) + "%")
             if (selectedIdxs && selectedIdxs[i]) {
                 nextLi.addClass("selected")
             }

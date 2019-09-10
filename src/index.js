@@ -2,5 +2,6 @@ import visView from "./vis_view"
 
 $(() => {
     const visField = $('#sorting-vis');
-    new visView(visField);
+    const buttonsDiv = $('#buttons-div');
+    new visView(visField, buttonsDiv);
 })

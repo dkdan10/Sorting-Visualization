@@ -11,6 +11,10 @@ h1 {
     height: 500px;
 }
 
+#buttons-div {
+    display: flex;
+}
+
 .visUl {
     display: flex;
     flex-direction: row;
@@ -20,4 +24,8 @@ h1 {
 
 .visLi {
     background-color: aqua;
+}
+
+.selected {
+    background-color: brown;
 }

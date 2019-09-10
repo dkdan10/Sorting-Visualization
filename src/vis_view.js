@@ -1,7 +1,8 @@
 
 export default class VisView {
-    constructor($visEl) {
+    constructor($visEl, $buttonsDiv) {
         this.$visEl = $visEl
+        this.$buttonsDiv = $buttonsDiv
 
         this.renderQueue = []
 
@@ -11,11 +12,38 @@ export default class VisView {
         }
         this.sortingArray = []
         this.resetSortingArray()
-        this.mergeSort("first", 0)
+
+        this.setupButtons()
+
+        // this.mergeSort("first", 0)
 
         this.renderQueueInterval = setInterval(() => {
             this.checkRenderQueue();
-        }, 1000);
+        }, 200);
+    }
+
+    setupButtons() {
+        const startMergeSearchButton = $("<input type='button' value='Start Merge Search'/>").click((e) => {
+            e.preventDefault();
+            if (!this.renderQueue.length) this.mergeSort("first", 0)
+        })
+
+        const changeArrayLength = $("<input type='text' value='10'/>").change((e) => {
+            const newArraySize = parseInt(e.target.value)
+            if (newArraySize) {
+                this.config.arrayLength = newArraySize
+                this.resetSortingArray()
+            }
+        })
+
+        const shuffleButton = $("<input type='button' value='New Array'/>").click((e) => {
+            e.preventDefault();
+            this.resetSortingArray();
+        })
+
+        this.$buttonsDiv.append(startMergeSearchButton)
+        this.$buttonsDiv.append(changeArrayLength)
+        this.$buttonsDiv.append(shuffleButton)
     }
 
     mergeSort(arr, index) {
@@ -32,7 +60,7 @@ export default class VisView {
 
         // Using recursion to combine the left and right
         const sortedHalves = this.merge(
-            this.mergeSort(left, index), this.mergeSort(right, index + middle)
+            this.mergeSort(left, index), this.mergeSort(right, index + middle), index
         );
         this.sortingArray = this.sortingArray.slice(0, index).concat(sortedHalves).concat(this.sortingArray.slice(index + sortedHalves.length))
         this.pushToRenderQueue(this.sortingArray)
@@ -41,19 +69,34 @@ export default class VisView {
 
     checkRenderQueue () {
         if (this.renderQueue.length) {
-            this.render(this.renderQueue.shift())
+            const stateToRender = this.renderQueue.shift()
+            this.render(stateToRender.arrayState, stateToRender.extra.selectedIdxs)
         }
     }
 
-    pushToRenderQueue (arrToRender) {
-        this.renderQueue.push(arrToRender.slice())
+    pushToRenderQueue (arrToRender, extra = {}) {
+        this.renderQueue.push({
+            arrayState: arrToRender.slice(),
+            extra
+        })
     }
 
-    merge(left, right) {
+    merge(left, right, startIndex) {
         let resultArray = [], leftIndex = 0, rightIndex = 0;
 
         // We will concatenate values into the resultArray in order
         while (leftIndex < left.length && rightIndex < right.length) {
+            const arrayToRender = this.sortingArray.slice(0, startIndex).concat(resultArray
+                .concat(left.slice(leftIndex))
+                .concat(right.slice(rightIndex))
+            ).concat(this.sortingArray.slice(startIndex + right.length + left.length))
+
+            this.pushToRenderQueue(arrayToRender, {selectedIdxs: 
+                {
+                    [startIndex + leftIndex]: true, 
+                    [startIndex + rightIndex + left.length - leftIndex]: true
+                }
+            })
             if (left[leftIndex] < right[rightIndex]) {
                 resultArray.push(left[leftIndex]);
                 leftIndex++; // move left array cursor
@@ -69,12 +112,15 @@ export default class VisView {
             .concat(right.slice(rightIndex));
     }
 
-    render (arr) {
+    render (arr, selectedIdxs) {
         this.$visEl.empty();
         const arrayUl = $("<ul>").addClass("visUl")
         for (let i = 0; i < arr.length; i++) {
             const el = arr[i];
             const nextLi = $("<li>").append(`${el}`).addClass("visLi").height(Math.floor(el / this.config.arrayLength * 10) + "%")
+            if (selectedIdxs && selectedIdxs[i]) {
+                nextLi.addClass("selected")
+            }
             arrayUl.append(nextLi)
         }
         this.$visEl.append(arrayUl)

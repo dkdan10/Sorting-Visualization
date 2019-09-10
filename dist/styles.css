@@ -1,0 +1,23 @@
+body {
+    text-align: center;
+}
+
+h1 {
+    font-size: 72px;
+    font-weight: 700;
+}
+
+#sorting-vis {
+    height: 500px;
+}
+
+.visUl {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 100%;
+}
+
+.visLi {
+    background-color: aqua;
+}

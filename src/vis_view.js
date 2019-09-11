@@ -1,4 +1,5 @@
 import MergeSortVisHelper from "./sorts/merge_sort";
+import QuickortVisHelper from "./sorts/quick_sort";
 
 export default class VisView {
     constructor($visEl, $buttonsDiv) {
@@ -12,6 +13,7 @@ export default class VisView {
             sortMethod: 0
         }
         this.mergeSortHelper = new MergeSortVisHelper(this.pushToRenderQueue)
+        this.quickSortHelper = new QuickortVisHelper(this.pushToRenderQueue)
 
         this.sortingArray = []
         this.resetSortingArray()
@@ -24,9 +26,14 @@ export default class VisView {
     }
 
     setupButtons() {
-        const startMergeSearchButton = $("<input type='button' value='Start Merge Search'/>").click((e) => {
+        const startMergeSearchButton = $("<input type='button' value='Start Merge Sort'/>").click((e) => {
             e.preventDefault();
-            if (!this.renderQueue.length) this.mergeSortHelper.sort(this.sortingArray.slice())
+            if (!this.renderQueue.length) this.sortingArray = this.mergeSortHelper.sort(this.sortingArray.slice())
+        })
+        
+        const startQuickSearchButton = $("<input type='button' value='Start Quick Sort'/>").click((e) => {
+            e.preventDefault();
+            if (!this.renderQueue.length) this.sortingArray = this.quickSortHelper.sort(this.sortingArray.slice())
         })
 
         const changeArrayLength = $("<input type='text' value='10'/>").change((e) => {
@@ -51,6 +58,7 @@ export default class VisView {
         })
 
         this.$buttonsDiv.append(startMergeSearchButton)
+        this.$buttonsDiv.append(startQuickSearchButton)
         this.$buttonsDiv.append(changeArrayLength)
         this.$buttonsDiv.append(shuffleButton)
     }

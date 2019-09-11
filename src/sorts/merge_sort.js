@@ -6,21 +6,18 @@ export default class MergeSortVisHelper {
 
     sort(arr) {
         this.arrayToSort = arr.slice()
-        this.mergeSort(this.arrayToSort, 0)
+        return this.mergeSort(this.arrayToSort, 0)
     }
 
     mergeSort(arr, index) {
         if (arr.length <= 1) {
             return arr;
         }
-        // In order to divide the array in half, we need to figure out the middle
         const middle = Math.floor(arr.length / 2);
 
-        // This is where we will be dividing the array into left and right
         const left = arr.slice(0, middle);
         const right = arr.slice(middle);
 
-        // Using recursion to combine the left and right
         const sortedHalves = this.merge(
             this.mergeSort(left, index), this.mergeSort(right, index + middle), index
         );
@@ -32,7 +29,6 @@ export default class MergeSortVisHelper {
     merge(left, right, startIndex) {
         let resultArray = [], leftIndex = 0, rightIndex = 0;
 
-        // We will concatenate values into the resultArray in order
         while (leftIndex < left.length && rightIndex < right.length) {
             const arrayToRender = this.arrayToSort.slice(0, startIndex).concat(resultArray
                 .concat(left.slice(leftIndex))
@@ -48,14 +44,13 @@ export default class MergeSortVisHelper {
             })
             if (left[leftIndex] < right[rightIndex]) {
                 resultArray.push(left[leftIndex]);
-                leftIndex++; // move left array cursor
+                leftIndex++;
             } else {
                 resultArray.push(right[rightIndex]);
-                rightIndex++; // move right array cursor
+                rightIndex++;
             }
         }
-        // We need to concat here because there will be one element remaining
-        // from either left OR the right
+
         return resultArray
             .concat(left.slice(leftIndex))
             .concat(right.slice(rightIndex));

@@ -102,7 +102,7 @@ export default class VisView {
             this.pushToRenderQueue(arrayToRender, {selectedIdxs: 
                 {
                     [startIndex + leftIndex]: true, 
-                    [startIndex + rightIndex + left.length - leftIndex]: true
+                    [startIndex + rightIndex + left.length]: true
                 }
             })
             if (left[leftIndex] < right[rightIndex]) {

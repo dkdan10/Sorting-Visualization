@@ -81,8 +81,10 @@ export default class VisView {
         this.$visEl.empty();
         const arrayUl = $("<ul>").addClass("visUl")
         for (let i = 0; i < arr.length; i++) {
-            const el = arr[i];
-            const nextLi = $("<li>").append(`<span>${el}</span>`).addClass("visLi").height(Math.floor(el / this.config.arrayLength * 10) + "%")
+            const elValue = arr[i];
+            const nextLi = $("<li>")
+                // .append(`<span>${elValue}</span>`)
+                .addClass("visLi").height(Math.floor(elValue / this.config.arrayLength * 10) + "%")
             if (selectedIdxs && selectedIdxs[i]) {
                 nextLi.addClass("selected")
             }
